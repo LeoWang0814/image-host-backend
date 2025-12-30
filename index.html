@@ -1,4 +1,4 @@
-<!doctype html>
+<!doctype html> 
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
@@ -293,12 +293,13 @@
 
   <script>
     const GITHUB_TOKEN = "YOUR-GITHUB-TOKEN";
-    const REPO_OWNER = "YOUR-REPO-OWNER";
+    const REPO_OWNER = "YOUR-NAME";
     const REPO_NAME  = "YOUR-REPO-NAME";
     const TARGET_DIR = "public/";
     const BRANCH     = "main";
     const COMMIT_MESSAGE_PREFIX = "upload:";
     const CONCURRENCY = 3;
+    const YOUR_WEBSITE_BASE = "https://your-web-site.com/";
 
     const repoDisplay = document.getElementById("repoDisplay");
     const dirDisplay = document.getElementById("dirDisplay");
@@ -427,6 +428,7 @@
         progress: 0,
         rawUrl: buildRawUrl(targetPath),
         blobUrl: buildBlobUrl(targetPath),
+        websiteUrl: buildWebsiteUrl(uuidName),
         error: "",
         element: null,
       };
@@ -438,6 +440,12 @@
 
     function buildBlobUrl(path) {
       return `https://github.com/${REPO_OWNER}/${REPO_NAME}/blob/${BRANCH}/${path}`;
+    }
+
+    function buildWebsiteUrl(filename) {
+      const base = (YOUR_WEBSITE_BASE || "").trim();
+      if (!base) return "";
+      return base.replace(/\/+$/, "") + "/" + filename.replace(/^\/+/, "");
     }
 
     function buildHeaders() {
@@ -523,6 +531,7 @@
         meta.innerHTML = `
           <div class="link">RAW: <a href="${item.rawUrl}" target="_blank">${item.rawUrl}</a></div>
           <div class="link">Blob: <a href="${item.blobUrl}" target="_blank">${item.blobUrl}</a></div>
+          <div class="link">Website: <a href="${item.websiteUrl}" target="_blank">${item.websiteUrl}</a></div>
         `;
         copyBtn.style.display = "inline-flex";
       } else if (item.status === "error") {
